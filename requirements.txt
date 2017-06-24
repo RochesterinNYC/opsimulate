@@ -1,4 +1,1 @@
 click==6.7
-GitPython==2.1.5
-pycrypto==2.6.1
-requests==2.18.1
