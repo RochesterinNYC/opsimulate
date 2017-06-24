@@ -3,7 +3,9 @@
 # Copyright (c) 2017 James Wen
 
 from Crypto.PublicKey import RSA
+import json
 import os
+from subprocess import call
 import zipfile
 
 import click
@@ -21,6 +23,7 @@ def deploy():
     # Set max charge/budget constrictions on student’s GCP account
     # Use Terraform and Gitlab terraform template to deploy and setup
     _generate_ssh_key()
+    _add_ssh_key_for_terraform()
     _setup_terraform()
     _get_gitlab_terraform()
     # _run_terraform()
@@ -47,6 +50,24 @@ def _generate_ssh_key():
         with open("./keys/public.key", 'w') as content_file:
             content_file.write(pubkey.exportKey('OpenSSH'))
         print("Generated SSH key")
+
+
+def _add_ssh_key_for_terraform():
+    service_account_file = 'service-account.json'
+    if os.path.isfile(service_account_file):
+        print("Adding SSH key to project now")
+        with open(service_account_file) as f:
+            data = json.load(f)
+        key_file = 'service-account-ssh-key'
+        with open(key_file, 'w') as f:
+            f.write(data['private_key'])
+        os.chmod(key_file, 0600)
+        call('ssh-add {}'.format(key_file), shell=True)
+        os.remove(key_file)
+    else:
+        print("Your GCP project's owner service account's credentials must be "
+              "in the '{}' file.".format(service_account_file))
+        exit(1)
 
 
 def _setup_terraform():
