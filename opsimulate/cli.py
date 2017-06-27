@@ -20,6 +20,7 @@ def deploy():
     # Set max charge/budget constrictions on student’s GCP account
     # Use GCE API client and Gitlab debian package to deploy and setup
     _create_gce_vm()
+    _enable_network_access_gitlab()
     _add_service_account_ssh_key()
     # Setup the student’s investigative tools on the server: ensure common
     # operational tools like curl, iostat, lsop, lsof, w, dig, nslookup, mtr,
@@ -78,6 +79,34 @@ def _create_gce_vm():
         project=project,
         zone=ZONE,
         body=config).execute()
+
+
+def _enable_network_access_gitlab():
+    print("Adding HTTP and HTTPS access to Gitlab instance")
+
+    NAME = 'opsimulate-gitlab'
+    compute = _get_gce_client()
+    ZONE = 'us-east4-a'
+    project = _get_service_account_info().get('project_id')
+
+    instance_info = compute.instances().get(
+        project=project,
+        zone=ZONE,
+        instance=NAME
+    ).execute()
+    fingerprint = instance_info.get('labelFingerprint')
+
+    body = {
+        "items": ['http-server', 'https-server'],
+        "fingerprint": fingerprint
+    }
+    compute.instances().setTags(
+        project=project,
+        zone=ZONE,
+        instance=NAME,
+        body=body
+    ).execute()
+    print("Added HTTP and HTTPS access to Gitlab instance")
 
 
 def _get_gce_client():
