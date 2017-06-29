@@ -4,4 +4,5 @@ __pycache__
 .tox
 *.egg-info
 
-terraform
+keys
+service-account.json

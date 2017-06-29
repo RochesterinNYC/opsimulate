@@ -6,8 +6,8 @@ import json
 import os
 from subprocess import call
 
-import click
 from apiclient import discovery
+import click
 
 
 @click.group()
@@ -19,16 +19,15 @@ def cli():
 def deploy():
     # Set max charge/budget constrictions on student’s GCP account
     # Use GCE API client and Gitlab debian package to deploy and setup
+    # Setup student interface to server by setting up SSH + keys
+    _generate_ssh_key()
     _create_gce_vm()
     _enable_network_access_gitlab()
-    _add_service_account_ssh_key()
     # Setup the student’s investigative tools on the server: ensure common
     # operational tools like curl, iostat, lsop, lsof, w, dig, nslookup, mtr,
     # etc. are present
-    # Setup student interface to server by setting up SSH + keys
     # Generate and print an SSH command that they can run in a separate command
     # line/terminal window to initiate an SSH connection with the server
-    pass
 
 
 def _create_gce_vm():
@@ -49,6 +48,12 @@ def _create_gce_vm():
         os.path.join(
             os.path.dirname(__file__), 'gitlab-startup-script.sh'), 'r').read()
 
+    PUBLIC_KEY_FILE = './keys/opsimulate.pub'
+    USERNAME = 'opsimulate'
+
+    with open(PUBLIC_KEY_FILE) as f:
+        public_key = f.read()
+
     config = {
         'name': NAME,
         'machineType': MACHINE_TYPE,
@@ -68,10 +73,17 @@ def _create_gce_vm():
             ]
         }],
         'metadata': {
-            'items': [{
-                'key': 'startup-script',
-                'value': startup_script
-            }]
+            'items': [
+                {
+                    'key': 'startup-script',
+                    'value': startup_script
+                },
+                {
+                    "key": "ssh-keys",
+                    "value": '{}:{}\n'.format(USERNAME, public_key)
+                }
+            ]
+
         }
     }
 
@@ -125,12 +137,14 @@ def _get_service_account_info():
         exit(1)
 
 
-def _add_service_account_ssh_key():
-    print("Adding SSH key to project now")
-    service_account_info = _get_service_account_info()
-    key_file = 'service-account-ssh-key'
-    with open(key_file, 'w') as f:
-        f.write(service_account_info['private_key'])
-    os.chmod(key_file, 0600)
-    call('ssh-add {}'.format(key_file), shell=True)
-    os.remove(key_file)
+def _generate_ssh_key():
+    DIR_NAME = "./keys"
+    if not os.path.isdir(DIR_NAME):
+        print("Generating SSH key")
+        os.mkdir(DIR_NAME)
+        PRIVATE_KEY_FILE = './keys/opsimulate'
+        USERNAME = 'opsimulate'
+
+        call("ssh-keygen -t rsa -f {} -C {} -N ''".format(PRIVATE_KEY_FILE, USERNAME), shell=True)
+        os.chmod(PRIVATE_KEY_FILE, 0400)
+        print('Generated SSH key')
