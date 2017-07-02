@@ -1,0 +1,80 @@
+# opsimulate
+Georgia Tech OMSCS EduTech Class Project
+
+## Description
+
+The opsimulate CLI will allow students to start a simulation of a production incident on an actual server that they can then investigate, debug, and fix. The opsimulate CLI will have the functionality to create servers, setup the server packages and configuration in a specific way, setup and run a service, provide the student with SSH access to the server, and setup an incident from an incident module. The opsimulate CLI tool will also provide hints and a description of and also solution for (if asked for) the incident. It can also check whether the student has successfully resolved the incident.
+
+## Motivation
+
+There are currently no free, open-source simulation-based learning frameworks or tools available for gaining sysadmin/devops related technical operational skills, knowledge, and experience. 
+
+## Dependencies
+
+- Python (2 or 3)
+- a GCP Account
+
+## Installation
+
+`pip install opsimulate`
+
+## GCP Setup 
+
+- Sign into GCP account using a Google account at console.cloud.google.com (Gmail works)
+
+![GCP Sign In](/docs/screenshots/gcp-sign-in.png?raw=true "GCP Sign In")
+
+- At the [GCP Home Dashboard](https://console.cloud.google.com/projectselector/home/dashboard), create a project.
+
+![GCP Create Project](/docs/screenshots/create-project.png?raw=true "GCP Create Project")
+
+![GCP Naming Project](/docs/screenshots/naming-project.png?raw=true "GCP Naming Project")
+
+- Go the IAM --> Service Accounts page.
+
+![GCP Service Accounts](/docs/screenshots/service-accounts-in-menu.png?raw=true "GCP Service Accounts")
+
+- Create a service account. Make sure you select the option to "Furnish a new private key"
+  of the "JSON" Key Type.
+
+![GCP Create Service Account](/docs/screenshots/create-service-account.png?raw=true "GCP Create Service Account")
+
+Also, make sure you give the service account the Project Owner role.
+
+![GCP Project Owner Role](/docs/screenshots/service-account-role.png?raw=true "GCP Project Owner Role")
+
+- Creating the service account will automatically download the service account credentials.
+
+- Set `GOOGLE_APPLICATION_CREDENTIALS` to where the GCP service account credentials are:
+
+  Ex. `export GOOGLE_APPLICATION_CREDENTIALS=~/Downloads/opsimulate-omscs-gatech-64486fd95a36.json`
+
+## Usage
+
+`opsimulate deploy`
+then `opsimulate connect`
+
+TODO:
+
+- Select a problem module via `opsimulate select`
+- Start the problem simulation via `opsimulate start`
+- Run `opsimulate connect` and run resulting SSH command to connect to server
+- Try to fix
+- If you need help/hints, run `opsimulate hint`
+- Run `opsimulate check` to check if the problem has been fixed
+- If you can't fix the issue yourself, run `opsimulate resolve` to end the problem simulation
+- Run `opsimulate clean` to clean up local artifacts (ex. generated SSH keys) and tear down GCP resources like the VM
+
+## Commands
+
+- `opsimulate deploy`
+- `opsimulate connect`
+- `opsimulate clean`
+
+TODO:
+
+- `opsimulate select`
+- `opsimulate start`
+- `opsimulate hint`
+- `opsimulate check`
+- `opsimulate resolve`

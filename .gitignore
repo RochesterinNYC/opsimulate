@@ -4,5 +4,7 @@ __pycache__
 .tox
 *.egg-info
 
+.DS_Store
+
 keys
 service-account.json
