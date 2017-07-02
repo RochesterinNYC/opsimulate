@@ -4,6 +4,7 @@
 
 import json
 import os
+import shutil
 from subprocess import call
 
 from apiclient import discovery
@@ -13,6 +14,15 @@ import click
 @click.group()
 def cli():
     print("CLI")
+
+
+@cli.command('clean')
+def clean():
+    # Clean local machine of generated artifacts
+    KEYS_DIR_NAME = "./keys"
+    if os.path.isdir(KEYS_DIR_NAME):
+        print("Removing 'keys' directory")
+        shutil.rmtree(KEYS_DIR_NAME)
 
 
 @cli.command('deploy')
@@ -145,6 +155,7 @@ def _generate_ssh_key():
         PRIVATE_KEY_FILE = './keys/opsimulate'
         USERNAME = 'opsimulate'
 
-        call("ssh-keygen -t rsa -f {} -C {} -N ''".format(PRIVATE_KEY_FILE, USERNAME), shell=True)
+        call("ssh-keygen -t rsa -f {} -C {} -N ''".format(
+            PRIVATE_KEY_FILE, USERNAME), shell=True)
         os.chmod(PRIVATE_KEY_FILE, 0400)
         print('Generated SSH key')
