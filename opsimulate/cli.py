@@ -10,6 +10,8 @@ from subprocess import call
 from apiclient import discovery
 import click
 
+import opsimulate.constants as constants
+
 
 @click.group()
 def cli():
@@ -19,33 +21,27 @@ def cli():
 @cli.command('clean')
 def clean():
     # Clean local machine of generated artifacts
-    KEYS_DIR_NAME = "./keys"
-    if os.path.isdir(KEYS_DIR_NAME):
+    if os.path.isdir(constants.KEYS_DIR_NAME):
         print("Removing 'keys' directory")
-        shutil.rmtree(KEYS_DIR_NAME)
+        shutil.rmtree(constants.KEYS_DIR_NAME)
 
 
 @cli.command('connect')
 def connect():
-    NAME = 'opsimulate-gitlab'
     compute = _get_gce_client()
-    ZONE = 'us-east4-a'
     project = _get_service_account_info().get('project_id')
 
     instance_info = compute.instances().get(
-                        project=project,
-                        zone=ZONE,
-                        instance=NAME).execute()
+        project=project,
+        zone=constants.ZONE,
+        instance=constants.INSTANCE_NAME).execute()
     ip_address = instance_info.get('networkInterfaces')[0] \
         .get('accessConfigs')[0].get('natIP')
 
-    USERNAME = 'opsimulate'
-    PRIVATE_KEY_FILE = './keys/opsimulate'
-
-    ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}" \
-        .format(PRIVATE_KEY_FILE, USERNAME, ip_address)
-    print("To connect to your running Gitlab VM instance, execute "
-          "the following command:")
+    ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}".format(
+        constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address)
+    print("To connect to your running Gitlab VM instance, execute the "
+          "following command:")
     print(ssh_command)
 
 
@@ -67,14 +63,12 @@ def deploy():
 def _create_gce_vm():
     print("Creating GCE VM")
 
-    NAME = 'opsimulate-gitlab'
-    ZONE = 'us-east4-a'
-    MACHINE_TYPE = "zones/%s/machineTypes/n1-standard-1" % ZONE
-    UBUNTU_VERSION = 'ubuntu-1404-lts'
+    zone_machine_type = 'zones/{}/machineTypes/{}'.format(
+        constants.ZONE, constants.MACHINE_TYPE)
 
     compute = _get_gce_client()
     image_response = compute.images().getFromFamily(
-        project='ubuntu-os-cloud', family=UBUNTU_VERSION).execute()
+        project='ubuntu-os-cloud', family=constants.UBUNTU_VERSION).execute()
     source_disk_image = image_response['selfLink']
 
     project = _get_service_account_info().get('project_id')
@@ -82,15 +76,12 @@ def _create_gce_vm():
         os.path.join(
             os.path.dirname(__file__), 'gitlab-startup-script.sh'), 'r').read()
 
-    PUBLIC_KEY_FILE = './keys/opsimulate.pub'
-    USERNAME = 'opsimulate'
-
-    with open(PUBLIC_KEY_FILE) as f:
+    with open(constants.PUBLIC_KEY_FILE) as f:
         public_key = f.read()
 
     config = {
-        'name': NAME,
-        'machineType': MACHINE_TYPE,
+        'name': constants.INSTANCE_NAME,
+        'machineType': zone_machine_type,
         'disks': [
             {
                 'boot': True,
@@ -114,7 +105,7 @@ def _create_gce_vm():
                 },
                 {
                     "key": "ssh-keys",
-                    "value": '{}:{}\n'.format(USERNAME, public_key)
+                    "value": '{}:{}\n'.format(constants.VM_USERNAME, public_key)
                 }
             ]
 
@@ -123,22 +114,20 @@ def _create_gce_vm():
 
     return compute.instances().insert(
         project=project,
-        zone=ZONE,
+        zone=constants.ZONE,
         body=config).execute()
 
 
 def _enable_network_access_gitlab():
     print("Adding HTTP and HTTPS access to Gitlab instance")
 
-    NAME = 'opsimulate-gitlab'
     compute = _get_gce_client()
-    ZONE = 'us-east4-a'
     project = _get_service_account_info().get('project_id')
 
     instance_info = compute.instances().get(
         project=project,
-        zone=ZONE,
-        instance=NAME
+        zone=constants.ZONE,
+        instance=constants.INSTANCE_NAME
     ).execute()
     fingerprint = instance_info.get('labelFingerprint')
 
@@ -148,8 +137,8 @@ def _enable_network_access_gitlab():
     }
     compute.instances().setTags(
         project=project,
-        zone=ZONE,
-        instance=NAME,
+        zone=constants.ZONE,
+        instance=constants.INSTANCE_NAME,
         body=body
     ).execute()
     print("Added HTTP and HTTPS access to Gitlab instance")
@@ -160,26 +149,22 @@ def _get_gce_client():
 
 
 def _get_service_account_info():
-    service_account_file = 'service-account.json'
-    if os.path.isfile(service_account_file):
-        with open(service_account_file) as f:
+    if os.path.isfile(constants.SERVICE_ACCOUNT_FILE):
+        with open(constants.SERVICE_ACCOUNT_FILE) as f:
             data = json.load(f)
         return data
     else:
         print("Your GCP project's owner service account's credentials must be "
-              "in the '{}' file.".format(service_account_file))
+              "in the '{}' file.".format(constants.SERVICE_ACCOUNT_FILE))
         exit(1)
 
 
 def _generate_ssh_key():
-    DIR_NAME = "./keys"
-    if not os.path.isdir(DIR_NAME):
+    if not os.path.isdir(constants.KEYS_DIR_NAME):
         print("Generating SSH key")
-        os.mkdir(DIR_NAME)
-        PRIVATE_KEY_FILE = './keys/opsimulate'
-        USERNAME = 'opsimulate'
+        os.mkdir(constants.KEYS_DIR_NAME)
 
         call("ssh-keygen -t rsa -f {} -C {} -N ''".format(
-            PRIVATE_KEY_FILE, USERNAME), shell=True)
-        os.chmod(PRIVATE_KEY_FILE, 0400)
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME), shell=True)
+        os.chmod(constants.PRIVATE_KEY_FILE, 0400)
         print('Generated SSH key')
