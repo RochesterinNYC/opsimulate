@@ -25,6 +25,30 @@ def clean():
         shutil.rmtree(KEYS_DIR_NAME)
 
 
+@cli.command('connect')
+def connect():
+    NAME = 'opsimulate-gitlab'
+    compute = _get_gce_client()
+    ZONE = 'us-east4-a'
+    project = _get_service_account_info().get('project_id')
+
+    instance_info = compute.instances().get(
+                        project=project,
+                        zone=ZONE,
+                        instance=NAME).execute()
+    ip_address = instance_info.get('networkInterfaces')[0] \
+        .get('accessConfigs')[0].get('natIP')
+
+    USERNAME = 'opsimulate'
+    PRIVATE_KEY_FILE = './keys/opsimulate'
+
+    ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}" \
+        .format(PRIVATE_KEY_FILE, USERNAME, ip_address)
+    print("To connect to your running Gitlab VM instance, execute "
+          "the following command:")
+    print(ssh_command)
+
+
 @cli.command('deploy')
 def deploy():
     # Set max charge/budget constrictions on student’s GCP account
