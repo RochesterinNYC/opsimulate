@@ -8,6 +8,7 @@ import shutil
 from subprocess import call
 
 from apiclient import discovery
+import googleapiclient
 import click
 
 import opsimulate.constants as constants
@@ -24,6 +25,25 @@ def clean():
     if os.path.isdir(constants.KEYS_DIR_NAME):
         print("Removing 'keys' directory")
         shutil.rmtree(constants.KEYS_DIR_NAME)
+
+    # Destroy created Gitlab VM
+    print("Attempting to tear down Gitlab VM")
+    compute = _get_gce_client()
+    project = _get_service_account_info().get('project_id')
+
+    try:
+        compute.instances().delete(
+            project=project,
+            zone=constants.ZONE,
+            instance=constants.INSTANCE_NAME).execute()
+    except googleapiclient.errors.HttpError as e:
+        if e.resp.status == 404:
+            print("Teardown of Gitlab VM instance '{}' unneeded because VM "
+                  "does not exist".format(constants.INSTANCE_NAME))
+        else:
+            raise(e)
+    else:
+        print("Tore down Gitlab VM")
 
 
 @cli.command('connect')
