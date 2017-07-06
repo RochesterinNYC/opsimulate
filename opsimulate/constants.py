@@ -2,11 +2,16 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2017 James Wen
 
-KEYS_DIR_NAME = './keys'
-PRIVATE_KEY_FILE = '{}/opsimulate'.format(KEYS_DIR_NAME)
-PUBLIC_KEY_FILE = '{}/opsimulate.pub'.format(KEYS_DIR_NAME)
+import os
 
-SERVICE_ACCOUNT_FILE = 'service-account.json'
+HOME = os.path.expanduser("~")
+OPSIMULATE_HOME = os.path.join(HOME, '.opsimulate')
+
+KEYS_DIR_NAME = os.path.join(OPSIMULATE_HOME, 'keys')
+PRIVATE_KEY_FILE = os.path.join(KEYS_DIR_NAME, 'opsimulate')
+PUBLIC_KEY_FILE = os.path.join(KEYS_DIR_NAME, 'opsimulate.pub')
+
+SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')
 
 ZONE = 'us-east4-a'
 MACHINE_TYPE = 'n1-standard-1'
