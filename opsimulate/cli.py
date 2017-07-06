@@ -19,6 +19,15 @@ def cli():
     print("CLI")
 
 
+@cli.command('setup')
+def setup():
+    # Ensure OPSIMULATE home directory exists
+    if not os.path.isdir(constants.OPSIMULATE_HOME):
+        print("Generating opsimulate home directory at {}"
+              .format(constants.OPSIMULATE_HOME))
+        os.mkdir(constants.OPSIMULATE_HOME)
+
+
 @cli.command('clean')
 def clean():
     # Clean local machine of generated artifacts

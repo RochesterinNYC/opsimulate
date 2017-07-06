@@ -51,10 +51,11 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Usage
 
-`opsimulate deploy`
-then `opsimulate connect`
+- `opsimulate setup`
+- `opsimulate deploy`
+- then `opsimulate connect`
 
-TODO:
+## TODO:
 
 - Select a problem module via `opsimulate select`
 - Start the problem simulation via `opsimulate start`
@@ -67,6 +68,7 @@ TODO:
 
 ## Commands
 
+- `opsimulate setup`
 - `opsimulate deploy`
 - `opsimulate connect`
 - `opsimulate clean`
