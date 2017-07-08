@@ -89,6 +89,21 @@ def deploy():
     # line/terminal window to initiate an SSH connection with the server
 
 
+@cli.command('module_select')
+@click.argument('module_path', type=click.Path(exists=True))
+def module_select(module_path):
+    if os.path.isabs(module_path):
+        abs_module_path = module_path
+    else:
+        current_dir = os.getcwd()
+        abs_module_path = os.path.join(current_dir, module_path)
+
+    with open(constants.SAVED_SELECTED_MODULE_PATH, 'w') as f:
+        f.write(abs_module_path)
+    print('Saved path of selected module to {}'.format(
+        constants.SAVED_SELECTED_MODULE_PATH))
+
+
 def _create_gce_vm():
     print("Creating GCE VM")
 

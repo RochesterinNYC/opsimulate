@@ -55,9 +55,10 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate deploy`
 - then `opsimulate connect`
 
+- Select a problem module via `opsimulate module_select`
+
 ## TODO:
 
-- Select a problem module via `opsimulate select`
 - Start the problem simulation via `opsimulate start`
 - Run `opsimulate connect` and run resulting SSH command to connect to server
 - Try to fix
@@ -72,10 +73,10 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate deploy`
 - `opsimulate connect`
 - `opsimulate clean`
+- `opsimulate module_select`
 
 TODO:
 
-- `opsimulate select`
 - `opsimulate start`
 - `opsimulate hint`
 - `opsimulate check`
