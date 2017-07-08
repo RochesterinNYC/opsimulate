@@ -69,6 +69,7 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Commands
 
+- `opsimulate status`
 - `opsimulate setup`
 - `opsimulate deploy`
 - `opsimulate connect`

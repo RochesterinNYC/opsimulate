@@ -104,6 +104,27 @@ def module_select(module_path):
         constants.SAVED_SELECTED_MODULE_PATH))
 
 
+@cli.command('status')
+def status():
+    print('Opsimulate Status')
+    if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
+            selected_module_path = f.read().strip()
+        if not selected_module_path:
+            selected_module_path_message = 'No module selected'
+        else:
+           selected_module_path_message = selected_module_path
+    else:
+        selected_module_path_message = 'No module selected'
+    print('Selected Module: {}'.format(selected_module_path_message))
+
+    if os.path.isfile(constants.SERVICE_ACCOUNT_FILE):
+        service_account_credentials_message = constants.SERVICE_ACCOUNT_FILE
+    else:
+        service_account_credentials_message = 'No GCP service account credentials present'
+    print('GCP SA Credentials: {}'.format(service_account_credentials_message))
+
+
 def _create_gce_vm():
     print("Creating GCE VM")
 
