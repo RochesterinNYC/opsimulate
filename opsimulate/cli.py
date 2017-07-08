@@ -101,6 +101,30 @@ def module_select(module_path):
         constants.SAVED_SELECTED_MODULE_PATH))
 
 
+@cli.command('module_start')
+def module_start():
+    print("Initiating module problem")
+
+    vm_instance_info = _running_vm_instance()
+
+    ip_address = vm_instance_info.get('networkInterfaces')[0] \
+        .get('accessConfigs')[0].get('natIP')
+
+    if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
+            selected_module_path = f.read().strip()
+
+    module_start_script = os.path.join(selected_module_path,
+        constants.MODULE_START_SCRIPT)
+
+    module_start_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{} 'bash -s' < {}".format(
+    constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address, module_start_script)
+
+    if call(module_start_command, shell=True) == 0:
+        print("Initiated module problem")
+    else:
+        print("Initiating module problem failed")
+
 @cli.command('status')
 def status():
     print('Opsimulate Status')

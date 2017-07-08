@@ -56,10 +56,10 @@ Also, make sure you give the service account the Project Owner role.
 - then `opsimulate connect`
 
 - Select a problem module via `opsimulate module_select`
+- Start the problem simulation via `opsimulate module_start`
 
 ## TODO:
 
-- Start the problem simulation via `opsimulate start`
 - Run `opsimulate connect` and run resulting SSH command to connect to server
 - Try to fix
 - If you need help/hints, run `opsimulate hint`
@@ -75,10 +75,10 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate connect`
 - `opsimulate clean`
 - `opsimulate module_select`
+- `opsimulate module_start`
 
 TODO:
 
-- `opsimulate start`
 - `opsimulate hint`
 - `opsimulate check`
 - `opsimulate resolve`
