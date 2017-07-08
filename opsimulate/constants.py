@@ -11,7 +11,8 @@ KEYS_DIR_NAME = os.path.join(OPSIMULATE_HOME, 'keys')
 PRIVATE_KEY_FILE = os.path.join(KEYS_DIR_NAME, 'opsimulate')
 PUBLIC_KEY_FILE = os.path.join(KEYS_DIR_NAME, 'opsimulate.pub')
 
-SAVED_SELECTED_MODULE_PATH = os.path.join(OPSIMULATE_HOME, 'selected_module.txt')
+SAVED_SELECTED_MODULE_PATH = os.path.join(OPSIMULATE_HOME,
+                                          'selected_module.txt')
 MODULE_START_SCRIPT = 'initiate'
 
 SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')

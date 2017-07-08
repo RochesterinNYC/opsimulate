@@ -68,7 +68,8 @@ def connect():
               "following command:")
         print(ssh_command)
     else:
-        print("The VM instance has not been created yet. Run 'opsimulate deploy'")
+        print("The VM instance has not been created yet. "
+              "Run 'opsimulate deploy'")
 
 
 @cli.command('deploy')
@@ -115,15 +116,18 @@ def module_start():
             selected_module_path = f.read().strip()
 
     module_start_script = os.path.join(selected_module_path,
-        constants.MODULE_START_SCRIPT)
+                                       constants.MODULE_START_SCRIPT)
 
-    module_start_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{} 'bash -s' < {}".format(
-    constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address, module_start_script)
+    module_start_command = \
+        "ssh -i {} -o 'StrictHostKeyChecking no' {}@{} 'bash -s' < {}".format(
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address,
+            module_start_script)
 
     if call(module_start_command, shell=True) == 0:
         print("Initiated module problem")
     else:
         print("Initiating module problem failed")
+
 
 @cli.command('status')
 def status():
@@ -134,7 +138,7 @@ def status():
         if not selected_module_path:
             selected_module_path_message = 'No module selected'
         else:
-           selected_module_path_message = selected_module_path
+            selected_module_path_message = selected_module_path
     else:
         selected_module_path_message = 'No module selected'
     print('Selected Module: {}'.format(selected_module_path_message))
@@ -142,7 +146,8 @@ def status():
     if os.path.isfile(constants.SERVICE_ACCOUNT_FILE):
         service_account_credentials_message = constants.SERVICE_ACCOUNT_FILE
     else:
-        service_account_credentials_message = 'No GCP service account credentials present'
+        service_account_credentials_message = \
+            'No GCP service account credentials present'
     print('GCP SA Credentials: {}'.format(service_account_credentials_message))
 
 
