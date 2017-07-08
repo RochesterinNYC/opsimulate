@@ -57,21 +57,18 @@ def clean():
 
 @cli.command('connect')
 def connect():
-    compute = _get_gce_client()
-    project = _get_service_account_info().get('project_id')
+    vm_instance_info = _running_vm_instance()
+    if vm_instance_info:
+        ip_address = vm_instance_info.get('networkInterfaces')[0] \
+            .get('accessConfigs')[0].get('natIP')
 
-    instance_info = compute.instances().get(
-        project=project,
-        zone=constants.ZONE,
-        instance=constants.INSTANCE_NAME).execute()
-    ip_address = instance_info.get('networkInterfaces')[0] \
-        .get('accessConfigs')[0].get('natIP')
-
-    ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}".format(
-        constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address)
-    print("To connect to your running Gitlab VM instance, execute the "
-          "following command:")
-    print(ssh_command)
+        ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}".format(
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address)
+        print("To connect to your running VM instance, execute the "
+              "following command:")
+        print(ssh_command)
+    else:
+        print("The VM instance has not been created yet. Run 'opsimulate deploy'")
 
 
 @cli.command('deploy')
@@ -184,16 +181,12 @@ def _create_gce_vm():
 
 
 def _enable_network_access_gitlab():
-    print("Adding HTTP and HTTPS access to Gitlab instance")
-
     compute = _get_gce_client()
     project = _get_service_account_info().get('project_id')
 
-    instance_info = compute.instances().get(
-        project=project,
-        zone=constants.ZONE,
-        instance=constants.INSTANCE_NAME
-    ).execute()
+    print("Adding HTTP and HTTPS access to Gitlab instance")
+
+    instance_info = _running_vm_instance()
     fingerprint = instance_info.get('labelFingerprint')
 
     body = {
@@ -233,3 +226,18 @@ def _generate_ssh_key():
             constants.PRIVATE_KEY_FILE, constants.VM_USERNAME), shell=True)
         os.chmod(constants.PRIVATE_KEY_FILE, 0400)
         print('Generated SSH key')
+
+
+def _running_vm_instance():
+    compute = _get_gce_client()
+    project = _get_service_account_info().get('project_id')
+    try:
+        return compute.instances().get(
+            project=project,
+            zone=constants.ZONE,
+            instance=constants.INSTANCE_NAME).execute()
+    except googleapiclient.errors.HttpError as e:
+        if e.resp.status == 404:
+            return None
+        else:
+            raise e
