@@ -4,8 +4,10 @@
 
 import json
 import os
+import random
 import shutil
 from subprocess import call
+import yaml
 
 from apiclient import discovery
 import googleapiclient
@@ -127,6 +129,25 @@ def module_start():
         print("Initiated module problem")
     else:
         print("Initiating module problem failed")
+
+
+@cli.command('module_hint')
+def module_hint():
+    print("Here's a hint:")
+
+    if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
+            selected_module_path = f.read().strip()
+
+    module_metadata_file = os.path.join(
+        selected_module_path, constants.MODULE_METADATA)
+
+    with open(module_metadata_file, 'r') as f:
+        module_metadata = yaml.load(f)
+
+    hints = module_metadata.get('hints')
+    hint = random.choice(hints)
+    print(hint)
 
 
 @cli.command('status')
