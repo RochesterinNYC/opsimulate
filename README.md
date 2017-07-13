@@ -59,12 +59,12 @@ Also, make sure you give the service account the Project Owner role.
 - Run `opsimulate connect` and run resulting SSH command to connect to server
 - Try to fix
 - If you need help/hints, run `opsimulate module_hint`
+- Run `opsimulate module_check` to check if the problem has been fixed
 
 - Run `opsimulate clean` to clean up local artifacts (ex. generated SSH keys) and tear down GCP resources like the VM
 
 ## TODO:
 
-- Run `opsimulate check` to check if the problem has been fixed
 - If you can't fix the issue yourself, run `opsimulate resolve` to end the problem simulation
 
 ## Commands
@@ -77,8 +77,8 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate module_select`
 - `opsimulate module_start`
 - `opsimulate module_hint`
+- `opsimulate module_check`
 
 TODO:
 
-- `opsimulate check`
 - `opsimulate resolve`

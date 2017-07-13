@@ -150,6 +150,33 @@ def module_hint():
     print(hint)
 
 
+@cli.command('module_check')
+def module_check():
+    print('Checking if module problem has been fixed...')
+
+    vm_instance_info = _running_vm_instance()
+
+    ip_address = vm_instance_info.get('networkInterfaces')[0] \
+        .get('accessConfigs')[0].get('natIP')
+
+    if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
+            selected_module_path = f.read().strip()
+
+    module_check_script = os.path.join(selected_module_path,
+                                       constants.MODULE_CHECK_SCRIPT)
+
+    module_check_command = \
+        "ssh -i {} -o 'StrictHostKeyChecking no' {}@{} 'bash -s' < {}".format(
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address,
+            module_check_script)
+
+    if call(module_check_command, shell=True) == 0:
+        print("Module problem has been fixed. Great job!")
+    else:
+        print("Module problem is still an issue. Keep trying, you got this!")
+
+
 @cli.command('status')
 def status():
     print('Opsimulate Status')
