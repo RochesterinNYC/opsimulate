@@ -177,6 +177,36 @@ def module_check():
         print("Module problem is still an issue. Keep trying, you got this!")
 
 
+@cli.command('module_resolve')
+def module_resolve():
+    print('Resolving module problem...')
+
+    vm_instance_info = _running_vm_instance()
+
+    ip_address = vm_instance_info.get('networkInterfaces')[0] \
+        .get('accessConfigs')[0].get('natIP')
+
+    if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
+            selected_module_path = f.read().strip()
+
+    module_resolve_script = os.path.join(selected_module_path,
+                                         constants.MODULE_RESOLVE_SCRIPT)
+
+    module_resolve_command = \
+        "ssh -i {} -o 'StrictHostKeyChecking no' {}@{} 'bash -s' < {}".format(
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address,
+            module_resolve_script)
+
+    if call(module_resolve_command, shell=True) == 0:
+        print("Module problem has been resolved.")
+    else:
+        print("Cannot resolve module problem")
+        print("The module problem might have been already resolved")
+        print("Run 'opsimulate module_check' to see if the problem "
+              "is still active")
+
+
 @cli.command('status')
 def status():
     print('Opsimulate Status')

@@ -15,6 +15,7 @@ SAVED_SELECTED_MODULE_PATH = os.path.join(OPSIMULATE_HOME,
                                           'selected_module.txt')
 MODULE_START_SCRIPT = 'initiate'
 MODULE_CHECK_SCRIPT = 'check'
+MODULE_RESOLVE_SCRIPT = 'resolve'
 MODULE_METADATA = 'metadata.yml'
 
 SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')
