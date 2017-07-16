@@ -3,7 +3,6 @@
 # Copyright (c) 2017 James Wen
 
 import os
-import random
 import shutil
 from subprocess import call
 
@@ -122,11 +121,18 @@ def module_start():
 
 
 @cli.command('module_hint')
-def module_hint():
-    print("Here's a hint:")
-    hints = helpers.selected_module_metadata().get('hints')
-    hint = random.choice(hints)
-    print(hint)
+@click.option('--seen', '-s', is_flag=True, default=False)
+def module_hint(seen):
+    if seen:
+        # Print all seen hints
+        print("Here's all the hints you've seen so far:")
+        hints = helpers.get_seen_hints()
+        for hint in hints:
+            print(hint)
+    else:
+        print("Here's a hint:")
+        hint = helpers.get_new_hint()
+        print(hint)
 
 
 @cli.command('module_check')

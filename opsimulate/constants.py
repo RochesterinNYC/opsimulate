@@ -13,6 +13,9 @@ PUBLIC_KEY_FILE = os.path.join(KEYS_DIR_NAME, 'opsimulate.pub')
 
 SAVED_SELECTED_MODULE_PATH = os.path.join(OPSIMULATE_HOME,
                                           'selected_module.txt')
+
+HINT_HISTORY_FILE = os.path.join(OPSIMULATE_HOME, 'hint-history.yml')
+
 MODULE_START_SCRIPT = 'initiate'
 MODULE_CHECK_SCRIPT = 'check'
 MODULE_RESOLVE_SCRIPT = 'resolve'

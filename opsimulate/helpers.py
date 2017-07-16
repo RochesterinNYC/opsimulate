@@ -4,6 +4,7 @@
 
 import json
 import os
+import random
 from subprocess import call
 import yaml
 
@@ -157,3 +158,31 @@ def selected_module_metadata():
     with open(module_metadata_file, 'r') as f:
         module_metadata = yaml.load(f)
     return module_metadata
+
+
+def get_seen_hints():
+    if os.path.isfile(constants.HINT_HISTORY_FILE):
+        with open(constants.HINT_HISTORY_FILE, 'r') as f:
+            seen_hints = yaml.load(f)
+    else:
+        seen_hints = []
+    return seen_hints
+
+
+def get_new_hint():
+    seen_hints = get_seen_hints()
+
+    # Get new hint
+    all_hints = selected_module_metadata().get('hints')
+    unseen_hints = list(set(all_hints) - set(seen_hints))
+    if unseen_hints:
+        hint = random.choice(unseen_hints)
+        seen_hints.append(hint)
+    else:
+        hint = 'No new hints available!'
+
+    # Record seen hints
+    with open(constants.HINT_HISTORY_FILE, 'w') as f:
+        yaml.dump(seen_hints, f, default_flow_style=False)
+
+    return hint
