@@ -29,6 +29,8 @@ def setup():
 
 @cli.command('clean')
 def clean():
+    helpers.clear_hint_history()
+
     # Clean local machine of generated artifacts
     if os.path.isdir(constants.KEYS_DIR_NAME):
         print("Removing 'keys' directory")
@@ -89,6 +91,8 @@ def deploy():
 @cli.command('module_select')
 @click.argument('module_path', type=click.Path(exists=True))
 def module_select(module_path):
+    helpers.clear_hint_history()
+
     if os.path.isabs(module_path):
         abs_module_path = module_path
     else:
@@ -103,6 +107,8 @@ def module_select(module_path):
 
 @cli.command('module_start')
 def module_start():
+    helpers.clear_hint_history()
+
     print("Initiating module problem")
 
     ip_address = helpers.running_vm_ip_address()
@@ -156,6 +162,8 @@ def module_check():
 
 @cli.command('module_resolve')
 def module_resolve():
+    helpers.clear_hint_history()
+
     print('Resolving module problem...')
 
     ip_address = helpers.running_vm_ip_address()

@@ -186,3 +186,8 @@ def get_new_hint():
         yaml.dump(seen_hints, f, default_flow_style=False)
 
     return hint
+
+
+def clear_hint_history():
+    if os.path.isfile(constants.HINT_HISTORY_FILE):
+        os.remove(constants.HINT_HISTORY_FILE)
