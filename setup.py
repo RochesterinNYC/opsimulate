@@ -58,6 +58,7 @@ setup(
     description=find_meta("description"),
     author=find_meta("author"),
     author_email=find_meta("email"),
+    url=find_meta("url"),
     packages=find_packages(exclude=["tests*"]),
     entry_points={
         "console_scripts": ["opsimulate=opsimulate.cli:cli"],

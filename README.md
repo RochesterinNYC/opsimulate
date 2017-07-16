@@ -1,4 +1,4 @@
-# opsimulate
+# [opsimulate](https://pypi.python.org/pypi/opsimulate)
 Georgia Tech OMSCS EduTech Class Project
 
 ## Description
@@ -81,4 +81,12 @@ Also, make sure you give the service account the Project Owner role.
 ```
 docker build -t opsimulate .
 docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate bash
+```
+
+## Pypi Build/Upload Workflow
+
+```
+python setup.py sdist
+python setup.py sdist upload -r pypitest
+python setup.py sdist upload -r pypi
 ```
