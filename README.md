@@ -75,3 +75,10 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate module_hint`
 - `opsimulate module_check`
 - `opsimulate module_resolve`
+
+## Docker Workflow
+
+```
+docker build -t opsimulate .
+docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate bash
+```
