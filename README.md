@@ -65,16 +65,16 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Commands
 
-- `opsimulate status`
-- `opsimulate setup`
-- `opsimulate deploy`
-- `opsimulate connect`
-- `opsimulate clean`
-- `opsimulate module_select`
-- `opsimulate module_start`
-- `opsimulate module_hint`
-- `opsimulate module_check`
-- `opsimulate module_resolve`
+- `opsimulate status` = Check the status of GCP credentials and selected problem module
+- `opsimulate setup` = Setup the ~/.opsimulate artifacts directory
+- `opsimulate deploy` = Deploy the GCP VM with Gitlab and setup SSH access
+- `opsimulate connect` = Print the SSH command that can be used to get onto the Gitlab VM
+- `opsimulate clean` = Clean up the GCP Gitlab VM and generated SSH keys
+- `opsimulate module_select` = Select a problem module
+- `opsimulate module_start` = Start the problem simulation
+- `opsimulate module_hint` = Get a hint about the problem
+- `opsimulate module_check` = Check if the problem has been resolved
+- `opsimulate module_resolve` = Resolve the problem
 
 ## Docker Workflow
 
