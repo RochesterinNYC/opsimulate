@@ -78,10 +78,20 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Docker Workflow
 
+Running/testing opsimulate source:
+
+```
+docker build -t opsimulate-local -f Dockerfile.local .
+docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate-local bash
+```
+
+Running opsimulate (from Pypi) in a container:
+
 ```
 docker build -t opsimulate .
 docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate bash
 ```
+
 
 ## Pypi Build/Upload Workflow
 
