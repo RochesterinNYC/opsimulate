@@ -3,7 +3,7 @@
 
 from __future__ import absolute_import, division, print_function
 __author__ = "James Wen"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __email__ = "jrw2175@columbia.edu"
 __description__ = "Tool/Framework for simulating operations problems/incidents"
 __url__ = "https://github.com/RochesterinNYC/opsimulate"
