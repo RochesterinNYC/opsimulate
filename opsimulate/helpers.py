@@ -205,8 +205,23 @@ def validate_module_metadata(module_path):
     for key in metadata:
         if key not in constants.ACCEPTED_METADATA_KEYS:
             module_metadata_correct = False
-            incorrect_keys.append(key)
+            incorrect_keys.append("'{}'".format(key))
     if not module_metadata_correct:
         error_msg = ('Module metadata includes improper keys: {}'
                      .format(', '.join(incorrect_keys)))
+        raise exceptions.ModuleMetadataError(error_msg)
+
+
+def validate_module_contents(module_path):
+    module_contents_correct = True
+    missing_files = []
+    for required_file in constants.REQUIRED_MODULE_FILES:
+        file_path = os.path.join(module_path, required_file)
+        if not os.path.isfile(file_path):
+            module_contents_correct = False
+            missing_files.append("'{}'".format(required_file))
+
+    if not module_contents_correct:
+        error_msg = ('Module missing required files: {}'
+                     .format(', '.join(missing_files)))
         raise exceptions.ModuleMetadataError(error_msg)

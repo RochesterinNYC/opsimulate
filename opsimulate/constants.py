@@ -23,6 +23,9 @@ MODULE_METADATA = 'metadata.yml'
 
 ACCEPTED_METADATA_KEYS = ['author', 'hints', 'description', 'introduction',
                           'solution']
+REQUIRED_MODULE_SCRIPTS = [MODULE_START_SCRIPT, MODULE_CHECK_SCRIPT,
+                           MODULE_RESOLVE_SCRIPT]
+REQUIRED_MODULE_FILES = REQUIRED_MODULE_SCRIPTS + [MODULE_METADATA]
 
 SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')
 

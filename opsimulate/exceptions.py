@@ -6,5 +6,9 @@ class OpsimulateError(Exception):
     """General Opsimulate Error"""
 
 
-class ModuleMetadataError(OpsimulateError):
+class ModuleValidationError(OpsimulateError):
+    """Error with module contents"""
+
+
+class ModuleMetadataError(ModuleValidationError):
     """Error with format of module metadata"""
