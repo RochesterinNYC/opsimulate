@@ -91,13 +91,14 @@ def deploy():
 @cli.command('module_select')
 @click.argument('module_path', type=click.Path(exists=True))
 def module_select(module_path):
-    helpers.clear_hint_history()
-
     if os.path.isabs(module_path):
         abs_module_path = module_path
     else:
         current_dir = os.getcwd()
         abs_module_path = os.path.join(current_dir, module_path)
+
+    helpers.validate_module_metadata(abs_module_path)
+    helpers.clear_hint_history()
 
     with open(constants.SAVED_SELECTED_MODULE_PATH, 'w') as f:
         f.write(abs_module_path)

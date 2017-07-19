@@ -21,6 +21,9 @@ MODULE_CHECK_SCRIPT = 'check'
 MODULE_RESOLVE_SCRIPT = 'resolve'
 MODULE_METADATA = 'metadata.yml'
 
+ACCEPTED_METADATA_KEYS = ['author', 'hints', 'description', 'introduction',
+                          'solution']
+
 SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')
 
 ZONE = 'us-east4-a'

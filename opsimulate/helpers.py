@@ -12,6 +12,7 @@ from apiclient import discovery
 import googleapiclient
 
 import opsimulate.constants as constants
+import opsimulate.exceptions as exceptions
 
 
 def create_gce_vm():
@@ -191,3 +192,21 @@ def get_new_hint():
 def clear_hint_history():
     if os.path.isfile(constants.HINT_HISTORY_FILE):
         os.remove(constants.HINT_HISTORY_FILE)
+
+
+def validate_module_metadata(module_path):
+    module_metadata_file = os.path.join(module_path, constants.MODULE_METADATA)
+
+    with open(module_metadata_file, 'r') as f:
+        metadata = yaml.load(f)
+
+    module_metadata_correct = True
+    incorrect_keys = []
+    for key in metadata:
+        if key not in constants.ACCEPTED_METADATA_KEYS:
+            module_metadata_correct = False
+            incorrect_keys.append(key)
+    if not module_metadata_correct:
+        error_msg = ('Module metadata includes improper keys: {}'
+                     .format(', '.join(incorrect_keys)))
+        raise exceptions.ModuleMetadataError(error_msg)
