@@ -97,7 +97,8 @@ def module_select(module_path):
         current_dir = os.getcwd()
         abs_module_path = os.path.join(current_dir, module_path)
 
-    helpers.validate_module_contents(module_path)
+    helpers.validate_module_contents(abs_module_path)
+    helpers.validate_module_scripts_executable(abs_module_path)
     helpers.validate_module_metadata(abs_module_path)
     helpers.clear_hint_history()
 

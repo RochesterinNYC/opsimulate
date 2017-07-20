@@ -12,3 +12,7 @@ class ModuleValidationError(OpsimulateError):
 
 class ModuleMetadataError(ModuleValidationError):
     """Error with format of module metadata"""
+
+
+class ModuleScriptsExecutableError(ModuleValidationError):
+    """Error with module scripts being executable"""

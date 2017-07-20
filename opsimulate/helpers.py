@@ -225,3 +225,18 @@ def validate_module_contents(module_path):
         error_msg = ('Module missing required files: {}'
                      .format(', '.join(missing_files)))
         raise exceptions.ModuleMetadataError(error_msg)
+
+
+def validate_module_scripts_executable(module_path):
+    scripts_executable = True
+    non_executable_files = []
+    for script in constants.REQUIRED_MODULE_SCRIPTS:
+        file_path = os.path.join(module_path, script)
+        if not os.access(file_path, os.X_OK):
+            scripts_executable = False
+            non_executable_files.append("'{}'".format(script))
+
+    if not scripts_executable:
+        error_msg = ('Following module scripts need to be executable: {}'
+                     .format(', '.join(non_executable_files)))
+        raise exceptions.ModuleScriptsExecutableError(error_msg)
