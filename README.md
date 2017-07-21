@@ -52,6 +52,7 @@ Also, make sure you give the service account the Project Owner role.
 ## Usage
 
 - `opsimulate setup`
+- `opsimulate load_credentials <GCP-service-account-credentials.json>`
 - `opsimulate deploy`
 
 - Select a problem module via `opsimulate module_select`
@@ -67,6 +68,7 @@ Also, make sure you give the service account the Project Owner role.
 
 - `opsimulate status` = Check the status of GCP credentials and selected problem module
 - `opsimulate setup` = Setup the ~/.opsimulate artifacts directory
+- `opsimulate load_credentials` = Copy over the GCP service account credentials into ~/.opsimulate directory
 - `opsimulate deploy` = Deploy the GCP VM with Gitlab and setup SSH access
 - `opsimulate connect` = Print the SSH command that can be used to get onto the Gitlab VM
 - `opsimulate clean` = Clean up the GCP Gitlab VM and generated SSH keys
