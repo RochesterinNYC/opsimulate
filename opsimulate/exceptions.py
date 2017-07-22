@@ -28,3 +28,7 @@ class HomeDirNotSetupError(OpsimulateError):
 
 class ModuleNotSelectedError(OpsimulateError):
     """Error with a module not being selected yet"""
+
+
+class GCPCredentialsNotLoadedError(OpsimulateError):
+    """Error with GCP credentials not having been loaded yet"""

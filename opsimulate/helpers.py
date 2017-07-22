@@ -261,6 +261,14 @@ def validate_opsimulate_home_present():
         raise exceptions.HomeDirNotSetupError(error_msg)
 
 
+def validate_credentials_loaded():
+    if not os.path.isfile(constants.SERVICE_ACCOUNT_FILE):
+        error_msg = ("The GCP service account credentials json file has not "
+                     "been loaded yet. Run 'opsimulate load_credentials "
+                     "<credentials_path>'")
+        raise exceptions.GCPCredentialsNotLoadedError(error_msg)
+
+
 def validate_module_selected():
     if not os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
         error_msg = ("No module has been selected yet. "

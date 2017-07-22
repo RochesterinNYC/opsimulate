@@ -45,6 +45,7 @@ def load_credentials(credential_path):
 
 @cli.command('clean')
 def clean():
+    helpers.validate_credentials_loaded()
     helpers.clear_hint_history()
 
     # Clean local machine of generated artifacts
@@ -75,6 +76,7 @@ def clean():
 @cli.command('connect')
 def connect():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_credentials_loaded()
     helpers.validate_vm_running()
     vm_instance_info = helpers.running_vm_instance()
     ip_address = vm_instance_info.get('networkInterfaces')[0] \
@@ -90,6 +92,7 @@ def connect():
 @cli.command('deploy')
 def deploy():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_credentials_loaded()
     # Set max charge/budget constrictions on student’s GCP account
     # Use GCE API client and Gitlab debian package to deploy and setup
     # Setup student interface to server by setting up SSH + keys
@@ -128,6 +131,7 @@ def module_select(module_path):
 @cli.command('module_start')
 def module_start():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_credentials_loaded()
     helpers.validate_module_selected()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
@@ -170,6 +174,7 @@ def module_hint(seen):
 @cli.command('module_check')
 def module_check():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_credentials_loaded()
     helpers.validate_module_selected()
     helpers.validate_vm_running()
 
@@ -193,6 +198,7 @@ def module_check():
 @cli.command('module_resolve')
 def module_resolve():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_credentials_loaded()
     helpers.validate_module_selected()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
