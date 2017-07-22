@@ -247,3 +247,10 @@ def validate_vm_running():
         error_msg = ("The VM instance has not been created yet. "
                      "Run 'opsimulate deploy'")
         raise exceptions.VMNotRunningError(error_msg)
+
+
+def validate_opsimulate_home_present():
+    if not os.path.isdir(constants.OPSIMULATE_HOME):
+        error_msg = ("The opsimulate home directory has not been setup yet. "
+                     "Run 'opsimulate setup'")
+        raise exceptions.HomeDirNotSetupError(error_msg)

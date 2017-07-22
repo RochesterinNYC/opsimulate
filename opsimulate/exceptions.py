@@ -20,3 +20,7 @@ class ModuleScriptsExecutableError(ModuleValidationError):
 
 class VMNotRunningError(OpsimulateError):
     """Error with Gitlab VM not running yet"""
+
+
+class HomeDirNotSetupError(OpsimulateError):
+    """Error with Opsimulate home dir not setup yet"""

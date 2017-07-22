@@ -31,6 +31,7 @@ def setup():
 @cli.command('load_credentials')
 @click.argument('credential_path', type=click.Path(exists=True))
 def load_credentials(credential_path):
+    helpers.validate_opsimulate_home_present()
     if os.path.isabs(credential_path):
         abs_credential_path = credential_path
     else:
@@ -73,6 +74,7 @@ def clean():
 
 @cli.command('connect')
 def connect():
+    helpers.validate_opsimulate_home_present()
     helpers.validate_vm_running()
     vm_instance_info = helpers.running_vm_instance()
     ip_address = vm_instance_info.get('networkInterfaces')[0] \
@@ -87,6 +89,7 @@ def connect():
 
 @cli.command('deploy')
 def deploy():
+    helpers.validate_opsimulate_home_present()
     # Set max charge/budget constrictions on student’s GCP account
     # Use GCE API client and Gitlab debian package to deploy and setup
     # Setup student interface to server by setting up SSH + keys
@@ -103,6 +106,8 @@ def deploy():
 @cli.command('module_select')
 @click.argument('module_path', type=click.Path(exists=True))
 def module_select(module_path):
+    helpers.validate_opsimulate_home_present()
+
     if os.path.isabs(module_path):
         abs_module_path = module_path
     else:
@@ -122,6 +127,7 @@ def module_select(module_path):
 
 @cli.command('module_start')
 def module_start():
+    helpers.validate_opsimulate_home_present()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
 
@@ -145,6 +151,8 @@ def module_start():
 @cli.command('module_hint')
 @click.option('--seen', '-s', is_flag=True, default=False)
 def module_hint(seen):
+    helpers.validate_opsimulate_home_present()
+
     if seen:
         # Print all seen hints
         print("Here's all the hints you've seen so far:")
@@ -159,6 +167,7 @@ def module_hint(seen):
 
 @cli.command('module_check')
 def module_check():
+    helpers.validate_opsimulate_home_present()
     helpers.validate_vm_running()
 
     print('Checking if module problem has been fixed...')
@@ -180,6 +189,7 @@ def module_check():
 
 @cli.command('module_resolve')
 def module_resolve():
+    helpers.validate_opsimulate_home_present()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
 
