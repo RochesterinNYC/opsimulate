@@ -48,11 +48,6 @@ def clean():
     helpers.validate_credentials_loaded()
     helpers.clear_hint_history()
 
-    # Clean local machine of generated artifacts
-    if os.path.isdir(constants.KEYS_DIR_NAME):
-        print("Removing 'keys' directory")
-        shutil.rmtree(constants.KEYS_DIR_NAME)
-
     # Destroy created Gitlab VM
     print("Attempting to tear down Gitlab VM")
     compute = helpers.get_gce_client()
@@ -71,6 +66,11 @@ def clean():
             raise(e)
     else:
         print("Tore down Gitlab VM")
+
+    # Clean local machine of generated artifacts
+    if os.path.isdir(constants.OPSIMULATE_HOME):
+        print('Removing {} directory'.format(constants.OPSIMULATE_HOME))
+        shutil.rmtree(constants.OPSIMULATE_HOME)
 
 
 @cli.command('connect')
