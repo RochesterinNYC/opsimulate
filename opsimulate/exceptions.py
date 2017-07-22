@@ -16,3 +16,7 @@ class ModuleMetadataError(ModuleValidationError):
 
 class ModuleScriptsExecutableError(ModuleValidationError):
     """Error with module scripts being executable"""
+
+
+class VMNotRunningError(OpsimulateError):
+    """Error with Gitlab VM not running yet"""

@@ -240,3 +240,10 @@ def validate_module_scripts_executable(module_path):
         error_msg = ('Following module scripts need to be executable: {}'
                      .format(', '.join(non_executable_files)))
         raise exceptions.ModuleScriptsExecutableError(error_msg)
+
+
+def validate_vm_running():
+    if not running_vm_instance():
+        error_msg = ("The VM instance has not been created yet. "
+                     "Run 'opsimulate deploy'")
+        raise exceptions.VMNotRunningError(error_msg)

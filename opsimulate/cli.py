@@ -15,16 +15,8 @@ import opsimulate.helpers as helpers
 
 @click.group()
 def cli():
-    print("CLI")
-
-
-@cli.command('setup')
-def setup():
-    # Ensure OPSIMULATE home directory exists
-    if not os.path.isdir(constants.OPSIMULATE_HOME):
-        print("Generating opsimulate home directory at {}"
-              .format(constants.OPSIMULATE_HOME))
-        os.mkdir(constants.OPSIMULATE_HOME)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = \
+        constants.SERVICE_ACCOUNT_FILE
 
 
 @cli.command('setup')
@@ -81,19 +73,16 @@ def clean():
 
 @cli.command('connect')
 def connect():
+    helpers.validate_vm_running()
     vm_instance_info = helpers.running_vm_instance()
-    if vm_instance_info:
-        ip_address = vm_instance_info.get('networkInterfaces')[0] \
-            .get('accessConfigs')[0].get('natIP')
+    ip_address = vm_instance_info.get('networkInterfaces')[0] \
+        .get('accessConfigs')[0].get('natIP')
 
-        ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}".format(
-            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address)
-        print("To connect to your running VM instance, execute the "
-              "following command:")
-        print(ssh_command)
-    else:
-        print("The VM instance has not been created yet. "
-              "Run 'opsimulate deploy'")
+    ssh_command = "ssh -i {} -o 'StrictHostKeyChecking no' {}@{}".format(
+        constants.PRIVATE_KEY_FILE, constants.VM_USERNAME, ip_address)
+    print("To connect to your running VM instance, execute the "
+          "following command:")
+    print(ssh_command)
 
 
 @cli.command('deploy')
@@ -133,6 +122,7 @@ def module_select(module_path):
 
 @cli.command('module_start')
 def module_start():
+    helpers.validate_vm_running()
     helpers.clear_hint_history()
 
     print("Initiating module problem")
@@ -169,6 +159,8 @@ def module_hint(seen):
 
 @cli.command('module_check')
 def module_check():
+    helpers.validate_vm_running()
+
     print('Checking if module problem has been fixed...')
 
     ip_address = helpers.running_vm_ip_address()
@@ -188,6 +180,7 @@ def module_check():
 
 @cli.command('module_resolve')
 def module_resolve():
+    helpers.validate_vm_running()
     helpers.clear_hint_history()
 
     print('Resolving module problem...')
