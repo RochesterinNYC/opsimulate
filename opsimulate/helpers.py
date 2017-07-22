@@ -194,6 +194,11 @@ def clear_hint_history():
         os.remove(constants.HINT_HISTORY_FILE)
 
 
+#--------------------
+# Validation methods
+#--------------------
+
+
 def validate_module_metadata(module_path):
     module_metadata_file = os.path.join(module_path, constants.MODULE_METADATA)
 
@@ -254,3 +259,10 @@ def validate_opsimulate_home_present():
         error_msg = ("The opsimulate home directory has not been setup yet. "
                      "Run 'opsimulate setup'")
         raise exceptions.HomeDirNotSetupError(error_msg)
+
+
+def validate_module_selected():
+    if not os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
+        error_msg = ("No module has been selected yet. "
+                     "Run 'opsimulate module_select <module_path>'")
+        raise exceptions.ModuleNotSelectedError(error_msg)

@@ -128,6 +128,7 @@ def module_select(module_path):
 @cli.command('module_start')
 def module_start():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_module_selected()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
 
@@ -152,6 +153,7 @@ def module_start():
 @click.option('--seen', '-s', is_flag=True, default=False)
 def module_hint(seen):
     helpers.validate_opsimulate_home_present()
+    helpers.validate_module_selected()
 
     if seen:
         # Print all seen hints
@@ -168,6 +170,7 @@ def module_hint(seen):
 @cli.command('module_check')
 def module_check():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_module_selected()
     helpers.validate_vm_running()
 
     print('Checking if module problem has been fixed...')
@@ -190,6 +193,7 @@ def module_check():
 @cli.command('module_resolve')
 def module_resolve():
     helpers.validate_opsimulate_home_present()
+    helpers.validate_module_selected()
     helpers.validate_vm_running()
     helpers.clear_hint_history()
 

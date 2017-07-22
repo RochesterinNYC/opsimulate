@@ -24,3 +24,7 @@ class VMNotRunningError(OpsimulateError):
 
 class HomeDirNotSetupError(OpsimulateError):
     """Error with Opsimulate home dir not setup yet"""
+
+
+class ModuleNotSelectedError(OpsimulateError):
+    """Error with a module not being selected yet"""
