@@ -83,8 +83,8 @@ Also, make sure you give the service account the Project Owner role.
 Running/testing opsimulate source:
 
 ```
-docker build -t opsimulate-local -f Dockerfile.local .
-docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate-local bash
+docker build -t opsimulate-testing -f Dockerfile.testing .
+docker run -v <absolute path to service account json>:/root/.opsimulate/service-account.json -v <absolute path to module>:/tmp/module -it opsimulate-testing bash
 ```
 
 Running opsimulate (from Pypi) in a container:
