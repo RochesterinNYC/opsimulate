@@ -67,6 +67,20 @@ def clean():
     else:
         print("Tore down Gitlab VM")
 
+    try:
+        compute.firewalls().delete(
+            project=project,
+            firewall=constants.PUBLIC_ACCESS_FIREWALL_RULE).execute()
+    except googleapiclient.errors.HttpError as e:
+        if e.resp.status == 404:
+            print("Teardown of Gitlab public access unneeded because "
+                  "appropriate firewall rule '{}' does not exist"
+                  .format(constants.PUBLIC_ACCESS_FIREWALL_RULE))
+        else:
+            raise(e)
+    else:
+        print("Tore down Gitlab public access firewall rule")
+
     # Clean local machine of generated artifacts
     if os.path.isdir(constants.OPSIMULATE_HOME):
         print('Removing {} directory'.format(constants.OPSIMULATE_HOME))
@@ -93,17 +107,11 @@ def connect():
 def deploy():
     helpers.validate_opsimulate_home_present()
     helpers.validate_credentials_loaded()
-    # Set max charge/budget constrictions on student’s GCP account
-    # Use GCE API client and Gitlab debian package to deploy and setup
     # Setup student interface to server by setting up SSH + keys
     helpers.generate_ssh_key()
+    # Use GCE API client and Gitlab debian package to deploy and setup
     helpers.create_gce_vm()
     helpers.enable_network_access_gitlab()
-    # Setup the student’s investigative tools on the server: ensure common
-    # operational tools like curl, iostat, lsop, lsof, w, dig, nslookup, mtr,
-    # etc. are present
-    # Generate and print an SSH command that they can run in a separate command
-    # line/terminal window to initiate an SSH connection with the server
 
 
 @cli.command('module_select')

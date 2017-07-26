@@ -63,7 +63,9 @@ def create_gce_vm():
                     "value": '{}:{}\n'.format(constants.VM_USERNAME, public_key)
                 }
             ]
-
+        },
+        'tags': {
+            'items': [constants.GITLAB_TAG]
         }
     }
 
@@ -74,25 +76,26 @@ def create_gce_vm():
 
 
 def enable_network_access_gitlab():
+    print("Adding HTTP access to Gitlab instance")
+
     compute = get_gce_client()
     project = get_service_account_info().get('project_id')
-
-    print("Adding HTTP and HTTPS access to Gitlab instance")
-
-    instance_info = running_vm_instance()
-    fingerprint = instance_info.get('labelFingerprint')
-
     body = {
-        "items": ['http-server', 'https-server'],
-        "fingerprint": fingerprint
+        'description': 'Public HTTP access to Gitlab instances',
+        'targetTags': [constants.GITLAB_TAG],
+        'allowed': [
+          {
+            'IPProtocol': 'tcp',
+            'ports': ['80']
+          },
+        ],
+        'name': constants.PUBLIC_ACCESS_FIREWALL_RULE
     }
-    compute.instances().setTags(
+    compute.firewalls().insert(
         project=project,
-        zone=constants.ZONE,
-        instance=constants.INSTANCE_NAME,
         body=body
     ).execute()
-    print("Added HTTP and HTTPS access to Gitlab instance")
+    print("Added HTTP access to Gitlab instance")
 
 
 def get_gce_client():
@@ -194,9 +197,9 @@ def clear_hint_history():
         os.remove(constants.HINT_HISTORY_FILE)
 
 
-#--------------------
+# -------------------
 # Validation methods
-#--------------------
+# -------------------
 
 
 def validate_module_metadata(module_path):
