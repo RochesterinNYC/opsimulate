@@ -212,3 +212,7 @@ def status():
         service_account_credentials_message = \
             'No GCP service account credentials present'
     print('GCP SA Credentials: {}'.format(service_account_credentials_message))
+
+    vm_status = helpers.running_vm_instance()
+    vm_status_str = 'VM is up' if vm_status else 'No VM is up'
+    print('VM Status: {}'.format(vm_status_str))
