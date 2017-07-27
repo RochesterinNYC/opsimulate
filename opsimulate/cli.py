@@ -7,7 +7,6 @@ import shutil
 from subprocess import call
 
 import click
-import googleapiclient
 
 import opsimulate.constants as constants
 import opsimulate.helpers as helpers
@@ -21,11 +20,7 @@ def cli():
 
 @cli.command('setup')
 def setup():
-    # Ensure OPSIMULATE home directory exists
-    if not os.path.isdir(constants.OPSIMULATE_HOME):
-        print("Generating opsimulate home directory at {}"
-              .format(constants.OPSIMULATE_HOME))
-        os.mkdir(constants.OPSIMULATE_HOME)
+    helpers.create_opsimulate_home_dir()
 
 
 @cli.command('load_credentials')
@@ -48,43 +43,9 @@ def clean():
     helpers.validate_credentials_loaded()
     helpers.clear_hint_history()
 
-    # Destroy created Gitlab VM
-    print("Attempting to tear down Gitlab VM")
-    compute = helpers.get_gce_client()
-    project = helpers.get_service_account_info().get('project_id')
-
-    try:
-        compute.instances().delete(
-            project=project,
-            zone=constants.ZONE,
-            instance=constants.INSTANCE_NAME).execute()
-    except googleapiclient.errors.HttpError as e:
-        if e.resp.status == 404:
-            print("Teardown of Gitlab VM instance '{}' unneeded because VM "
-                  "does not exist".format(constants.INSTANCE_NAME))
-        else:
-            raise(e)
-    else:
-        print("Tore down Gitlab VM")
-
-    try:
-        compute.firewalls().delete(
-            project=project,
-            firewall=constants.PUBLIC_ACCESS_FIREWALL_RULE).execute()
-    except googleapiclient.errors.HttpError as e:
-        if e.resp.status == 404:
-            print("Teardown of Gitlab public access unneeded because "
-                  "appropriate firewall rule '{}' does not exist"
-                  .format(constants.PUBLIC_ACCESS_FIREWALL_RULE))
-        else:
-            raise(e)
-    else:
-        print("Tore down Gitlab public access firewall rule")
-
-    # Clean local machine of generated artifacts
-    if os.path.isdir(constants.OPSIMULATE_HOME):
-        print('Removing {} directory'.format(constants.OPSIMULATE_HOME))
-        shutil.rmtree(constants.OPSIMULATE_HOME)
+    helpers.delete_gce_vm()
+    helpers.disable_network_access_gitlab()
+    helpers.delete_opsimulate_home_dir()
 
 
 @cli.command('connect')

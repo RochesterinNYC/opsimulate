@@ -5,6 +5,7 @@
 import json
 import os
 import random
+import shutil
 from subprocess import call
 import yaml
 
@@ -81,7 +82,7 @@ def enable_network_access_gitlab():
     compute = get_gce_client()
     project = get_service_account_info().get('project_id')
     body = {
-        'description': 'Public HTTP access to Gitlab instances',
+        'description': 'HTTP access to Gitlab instances',
         'targetTags': [constants.GITLAB_TAG],
         'allowed': [
           {
@@ -89,13 +90,70 @@ def enable_network_access_gitlab():
             'ports': ['80']
           },
         ],
-        'name': constants.PUBLIC_ACCESS_FIREWALL_RULE
+        'name': constants.HTTP_ACCESS_FIREWALL_RULE
     }
     compute.firewalls().insert(
         project=project,
         body=body
     ).execute()
     print("Added HTTP access to Gitlab instance")
+
+
+def create_opsimulate_home_dir():
+    # Ensure OPSIMULATE home directory exists
+    if not os.path.isdir(constants.OPSIMULATE_HOME):
+        print("Generating opsimulate home directory at {}"
+              .format(constants.OPSIMULATE_HOME))
+        os.mkdir(constants.OPSIMULATE_HOME)
+
+
+def delete_opsimulate_home_dir():
+    # Clean local machine of generated artifacts
+    if os.path.isdir(constants.OPSIMULATE_HOME):
+        print('Removing {} directory'.format(constants.OPSIMULATE_HOME))
+        shutil.rmtree(constants.OPSIMULATE_HOME)
+
+
+def delete_gce_vm():
+    print("Attempting to tear down Gitlab VM")
+
+    compute = get_gce_client()
+    project = get_service_account_info().get('project_id')
+
+    try:
+        compute.instances().delete(
+            project=project,
+            zone=constants.ZONE,
+            instance=constants.INSTANCE_NAME).execute()
+    except googleapiclient.errors.HttpError as e:
+        if e.resp.status == 404:
+            print("Teardown of Gitlab VM instance '{}' unneeded because VM "
+                  "does not exist".format(constants.INSTANCE_NAME))
+        else:
+            raise(e)
+    else:
+        print("Tore down Gitlab VM")
+
+
+def disable_network_access_gitlab():
+    print("Attempting to tear down Gitlab HTTP access firewall rule")
+
+    compute = get_gce_client()
+    project = get_service_account_info().get('project_id')
+
+    try:
+        compute.firewalls().delete(
+            project=project,
+            firewall=constants.HTTP_ACCESS_FIREWALL_RULE).execute()
+    except googleapiclient.errors.HttpError as e:
+        if e.resp.status == 404:
+            print("Disabling Gitlab HTTP access unneeded because "
+                  "appropriate firewall rule '{}' does not exist"
+                  .format(constants.HTTP_ACCESS_FIREWALL_RULE))
+        else:
+            raise(e)
+    else:
+        print("Tore down Gitlab HTTP access firewall rule")
 
 
 def get_gce_client():
