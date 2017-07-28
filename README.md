@@ -55,6 +55,8 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate load_credentials <GCP-service-account-credentials.json>`
 - `opsimulate deploy`
 
+- Monitor `opsimulate status` to see when the VM and Gitlab are up and ready.
+
 - Select a problem module via `opsimulate module_select`
 - Start the problem simulation via `opsimulate module_start`
 - Run `opsimulate connect` and run resulting SSH command to connect to server
@@ -66,7 +68,7 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Commands
 
-- `opsimulate status` = Check the status of GCP credentials and selected problem module
+- `opsimulate status` = Check the status of GCP credentials, selected problem module, VM and Gitlab status
 - `opsimulate setup` = Setup the ~/.opsimulate artifacts directory
 - `opsimulate load_credentials` = Copy over the GCP service account credentials into ~/.opsimulate directory
 - `opsimulate deploy` = Deploy the GCP VM with Gitlab and setup SSH access

@@ -6,7 +6,7 @@ import json
 import os
 import random
 import shutil
-from subprocess import call
+import subprocess
 import yaml
 
 from apiclient import discovery
@@ -176,8 +176,9 @@ def generate_ssh_key():
         print("Generating SSH key")
         os.mkdir(constants.KEYS_DIR_NAME)
 
-        call("ssh-keygen -t rsa -f {} -C {} -N ''".format(
-            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME), shell=True)
+        subprocess.call("ssh-keygen -t rsa -f {} -C {} -N ''".format(
+                        constants.PRIVATE_KEY_FILE, constants.VM_USERNAME),
+                        shell=True)
         os.chmod(constants.PRIVATE_KEY_FILE, 0400)
         print('Generated SSH key')
 
@@ -204,6 +205,20 @@ def running_vm_ip_address():
         .get('accessConfigs')[0].get('natIP')
 
     return ip_address
+
+
+def gitlab_service_ready():
+    ip_address = running_vm_ip_address()
+    grep_command = "grep '{}' {}".format(
+        constants.GITLAB_READY_LOG_MESSAGE, constants.GITLAB_LOG)
+    check_gitlab_ready_command = \
+        '''ssh -i {} -o "StrictHostKeyChecking no" {}@{} "{}"'''.format(
+            constants.PRIVATE_KEY_FILE, constants.VM_USERNAME,
+            ip_address, grep_command)
+
+    return (subprocess.call(check_gitlab_ready_command, shell=True,
+                            stdout=open(os.devnull, "w"),
+                            stderr=subprocess.STDOUT) == 0)
 
 
 def file_from_selected_module(desired_file):

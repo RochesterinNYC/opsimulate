@@ -216,3 +216,12 @@ def status():
     vm_status = helpers.running_vm_instance()
     vm_status_str = 'VM is up' if vm_status else 'No VM is up'
     print('VM Status: {}'.format(vm_status_str))
+
+    if vm_status:
+        gitlab_ready = helpers.gitlab_service_ready()
+        gitlab_status_str = ('Up and ready' if vm_status and gitlab_ready
+                             else 'Still installing and setting up')
+    else:
+        gitlab_status_str = 'Not up or installing'
+
+    print('Gitlab Status: {}'.format(gitlab_status_str))

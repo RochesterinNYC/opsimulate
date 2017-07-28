@@ -36,3 +36,6 @@ INSTANCE_NAME = 'opsimulate-gitlab'
 VM_USERNAME = 'opsimulate'
 GITLAB_TAG = 'gitlab'
 HTTP_ACCESS_FIREWALL_RULE = 'gitlab-http-access'
+
+GITLAB_READY_LOG_MESSAGE = 'INFO Finished running startup scripts'
+GITLAB_LOG = '/var/log/syslog'
