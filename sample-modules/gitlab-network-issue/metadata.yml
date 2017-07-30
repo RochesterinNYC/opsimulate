@@ -7,6 +7,8 @@ hints:
   - Using 'curl' is a great way to get more explicit HTTP info about endpoints.
   - I think someone on the security team mentioned something recently about changing firewall rules on all servers...
   - One of the most commonly utilized Linux utilities for network control is 'iptables'. Super powerful tool!
+  - "A great way to find incoming http traffic on the Gitlab server from your machine: 'tcpdump -n \"src host <your machine's IP> and dst port 80\"'"
+  - "A great way to find outgoing http traffic from the Gitlab server to your machine: 'tcpdump -n \"dst host <your machine's IP> and src port 80\"'"
 description: You are running your company's public Gitlab instance. You're also currently oncall for it. Let's see how you handle some network issues.
 introduction: Your Gitlab instance is no longer reachable! You seem to no longer be able to access the Gitlab instance via browser or curl? Let's get to fixing it!
 solution: One way to fix the issue would be to just flush those iptable rules via 'sudo iptables -F'. However, this would also flush and delete all the other existing iptables rules. The recommended fix would be to remove that specific rule. You can do this by running 'sudo iptables -D <rule specifics>'. Check out the module 'resolve' script for a detailed example.
