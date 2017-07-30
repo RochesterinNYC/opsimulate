@@ -1,9 +1,12 @@
 ---
 author: James Wen
 hints:
-  - Test Hint 1
-  - Test Hint 2
-  - Test Hint 3
+  - Using 'tcpdump' on the Gitlab server is a great way to monitor outgoing and incoming traffic of all kinds. You can filter for source and destination ports and ip addresses.
+  - Using 'ping' to try and reach the Gitlab server is a great way to see whether the server can resolve any kinds of traffic. But beware, ping uses icmp protocol!
+  - Using dns lookup tools like 'dig' or 'nslookup' are great ways to find whether a hostname or IP address is resolvable.
+  - Using 'curl' is a great way to get more explicit HTTP info about endpoints.
+  - I think someone on the security team mentioned something recently about changing firewall rules on all servers...
+  - One of the most commonly utilized Linux utilities for network control is 'iptables'. Super powerful tool!
 description: Your Gitlab instance is no longer reachable! You seem to no longer be able to access the Gitlab instance.
 introduction: You are running Gitlab. You're oncall for it.
 solution: Just flush those iptable rules! Or, if you want to be more surgical, here's how you can disable that specific rule
