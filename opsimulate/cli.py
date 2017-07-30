@@ -96,6 +96,9 @@ def module_select(module_path):
     print('Saved path of selected module to {}'.format(
         constants.SAVED_SELECTED_MODULE_PATH))
 
+    print('Module Description:')
+    print(helpers.get_module_description())
+
 
 @cli.command('module_start')
 def module_start():
@@ -118,6 +121,8 @@ def module_start():
 
     if call(module_start_command, shell=True) == 0:
         print("Initiated module problem")
+        print('In this problem scenario:')
+        print(helpers.get_module_intro())
     else:
         print("Initiating module problem failed")
 
@@ -185,6 +190,8 @@ def module_resolve():
 
     if call(module_resolve_command, shell=True) == 0:
         print("Module problem has been resolved.")
+        print('Solution Explanation:')
+        print(helpers.get_module_solution())
     else:
         print("Cannot resolve module problem")
         print("The module problem might have been already resolved")

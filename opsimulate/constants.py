@@ -21,8 +21,14 @@ MODULE_CHECK_SCRIPT = 'check'
 MODULE_RESOLVE_SCRIPT = 'resolve'
 MODULE_METADATA = 'metadata.yml'
 
-ACCEPTED_METADATA_KEYS = ['author', 'hints', 'description', 'introduction',
-                          'solution']
+MODULE_DESCRIPTION_KEY = 'description'
+MODULE_INTRO_KEY = 'introduction'
+MODULE_SOLUTION_KEY = 'solution'
+MODULE_HINTS_KEY = 'hints'
+
+ACCEPTED_METADATA_KEYS = ['author', MODULE_DESCRIPTION_KEY,
+                          MODULE_INTRO_KEY, MODULE_SOLUTION_KEY,
+                          MODULE_HINTS_KEY]
 REQUIRED_MODULE_SCRIPTS = [MODULE_START_SCRIPT, MODULE_CHECK_SCRIPT,
                            MODULE_RESOLVE_SCRIPT]
 REQUIRED_MODULE_FILES = REQUIRED_MODULE_SCRIPTS + [MODULE_METADATA]

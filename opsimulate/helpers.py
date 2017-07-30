@@ -221,6 +221,11 @@ def gitlab_service_ready():
                             stderr=subprocess.STDOUT) == 0)
 
 
+# ----------------------
+# Problem module methods
+# ----------------------
+
+
 def file_from_selected_module(desired_file):
     if os.path.isfile(constants.SAVED_SELECTED_MODULE_PATH):
         with open(constants.SAVED_SELECTED_MODULE_PATH, 'r') as f:
@@ -250,7 +255,8 @@ def get_new_hint():
     seen_hints = get_seen_hints()
 
     # Get new hint
-    all_hints = selected_module_metadata().get('hints')
+    all_hints = selected_module_metadata().get(
+                    constants.MODULE_HINTS_KEY)
     unseen_hints = list(set(all_hints) - set(seen_hints))
     if unseen_hints:
         hint = random.choice(unseen_hints)
@@ -268,6 +274,24 @@ def get_new_hint():
 def clear_hint_history():
     if os.path.isfile(constants.HINT_HISTORY_FILE):
         os.remove(constants.HINT_HISTORY_FILE)
+
+
+def get_module_intro():
+    metadata = selected_module_metadata()
+    intro = metadata.get(constants.MODULE_INTRO_KEY)
+    return intro
+
+
+def get_module_description():
+    metadata = selected_module_metadata()
+    description = metadata.get(constants.MODULE_DESCRIPTION_KEY)
+    return description
+
+
+def get_module_solution():
+    metadata = selected_module_metadata()
+    solution = metadata.get(constants.MODULE_SOLUTION_KEY)
+    return solution
 
 
 # -------------------
