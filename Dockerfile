@@ -5,3 +5,5 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=/root/.opsimulate/service-account.json
 RUN pip install opsimulate
 
 RUN opsimulate setup
+
+COPY sample-modules /tmp/sample-modules

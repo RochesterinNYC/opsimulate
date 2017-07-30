@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Specifically delete that outgoing http blocking rule
+sudo iptables -D OUTPUT -p tcp --source-port 80 -j DROP

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export external_ip=$(curl -s "http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "X-Google-Metadata-Request: True")
+echo $external_ip > /tmp/external_ip
+
+# Block outgoing HTTP traffic
+sudo iptables -A OUTPUT -p tcp --source-port 80 -j DROP

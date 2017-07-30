@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Get external IP of Gitlab instance
+export external_ip=$(cat /tmp/external_ip)
+
+# Follow redirect, suppress output, and search for 200 response code
+curl -sIL --connect-timeout 5 "http://$external_ip" | grep 'HTTP/1.1' | grep -q 200
