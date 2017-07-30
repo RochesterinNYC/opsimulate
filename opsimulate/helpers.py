@@ -278,8 +278,13 @@ def clear_hint_history():
 def validate_module_metadata(module_path):
     module_metadata_file = os.path.join(module_path, constants.MODULE_METADATA)
 
-    with open(module_metadata_file, 'r') as f:
-        metadata = yaml.load(f)
+    try:
+        with open(module_metadata_file, 'r') as f:
+            metadata = yaml.load(f)
+    except yaml.scanner.ScannerError as e:
+        error_msg = ('Module metadata is improper yaml. YAML parsing error is: '
+                     '{}'.format(e))
+        raise exceptions.ModuleMetadataError(error_msg)
 
     module_metadata_correct = True
     incorrect_keys = []
