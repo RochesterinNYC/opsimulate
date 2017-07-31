@@ -3,7 +3,7 @@ Georgia Tech OMSCS EduTech Class Project
 
 ## Description
 
-The opsimulate CLI will allow students to start a simulation of a production incident on an actual server that they can then investigate, debug, and fix. The opsimulate CLI will have the functionality to create servers, setup the server packages and configuration in a specific way, setup and run a service, provide the student with SSH access to the server, and setup an incident from an incident module. The opsimulate CLI tool will also provide hints and a description of and also solution for (if asked for) the incident. It can also check whether the student has successfully resolved the incident.
+The opsimulate CLI allows students to deploy a working, accessible Gitlab instance and then start a simulation of a production incident with that Gitlab instance that they can investigate, debug, and fix. The opsimulate CLI will have the functionality to create servers, setup the server packages and configuration in a specific way, setup and run a Gitlab service, provide the student with SSH access to the server, and setup an incident from an incident module. The opsimulate CLI tool will also provide hints and a description of and also solution for (if asked for) the incident. It can also check whether the student has successfully resolved the incident.
 
 ## Motivation
 
@@ -11,16 +11,16 @@ There are currently no free, open-source simulation-based learning frameworks or
 
 ## Dependencies
 
-- Python (2 or 3)
-- a GCP Account
+- Python 2.x
+- a Google Compute Platform Account
 
 ## Installation
 
 `pip install opsimulate`
 
-## GCP Setup 
+## Google Compute Platform Setup 
 
-- Sign into GCP account using a Google account at console.cloud.google.com (Gmail works)
+- Sign into your GCP account using a Google account at [console.cloud.google.com](console.cloud.google.com) (Gmail works). Please create a Google account if you do not have one.
 
 ![GCP Sign In](/docs/screenshots/gcp-sign-in.png?raw=true "GCP Sign In")
 
@@ -43,28 +43,22 @@ Also, make sure you give the service account the Project Owner role.
 
 ![GCP Project Owner Role](/docs/screenshots/service-account-role.png?raw=true "GCP Project Owner Role")
 
-- Creating the service account will automatically download the service account credentials.
+- Creating the service account will automatically download the service account credentials. It will download as a json file. Note where the credentials json file downloaded to because it will be required when you run `opsimulate load_credentials` to properly copy over the GCP credentials.
 
-- Set `GOOGLE_APPLICATION_CREDENTIALS` to where the GCP service account credentials are:
+## Usage/Workflow
 
-  Ex. `export GOOGLE_APPLICATION_CREDENTIALS=~/Downloads/opsimulate-omscs-gatech-64486fd95a36.json`
-
-## Usage
-
-- `opsimulate setup`
-- `opsimulate load_credentials <GCP-service-account-credentials.json>`
-- `opsimulate deploy`
-
-- Monitor `opsimulate status` to see when the VM and Gitlab are up and ready.
-
-- Select a problem module via `opsimulate module_select`
+- Run `opsimulate setup` to setup the home `~/.opsimulate` directory that opsimulate generates artifacts in.
+- Run `opsimulate load_credentials <path to GCP-service-account-credentials.json>` to load in the GCP service account credentials.
+- Run `opsimulate deploy` to create the Gitlab instance and make it accessible.
+- Run `opsimulate status` until the output displays that both the VM and Gitlab are up and ready.
+- Select a problem module via `opsimulate module_select <path to problem module dir>`
 - Start the problem simulation via `opsimulate module_start`
-- Run `opsimulate connect` and run resulting SSH command to connect to server
-- Try to fix
-- If you need help/hints, run `opsimulate module_hint`
-- Run `opsimulate module_check` to check if the problem has been fixed
-- If you can't fix the issue yourself, run `opsimulate module_resolve` to end the problem simulation
-- Run `opsimulate clean` to clean up local artifacts (ex. generated SSH keys) and tear down GCP resources like the VM
+- In a separate command line window, run `opsimulate connect` and run the printed SSH command to connect to your Gitlab server.
+- Investigate, debug, fix, do whatever you need to figure out what the issue is and how to fix it.
+- If you need help/hints, run `opsimulate module_hint` as many times as you need.
+- If at any time, you want to check if the problem has been fixed, run `opsimulate module_check`. 
+- If you can't fix the issue yourself, run `opsimulate module_resolve` to fix the issue and end the problem simulation. Your Gitlab instance will still be up.
+- When you're completely done, run `opsimulate clean` to clean up local artifacts (ex. generated SSH keys) and tear down GCP resources like the Gitlab VM.
 
 ## Commands
 
