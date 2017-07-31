@@ -74,6 +74,11 @@ Also, make sure you give the service account the Project Owner role.
 - `opsimulate module_check` = Check if the problem has been resolved
 - `opsimulate module_resolve` = Resolve the problem
 
+## Contributing
+
+See the [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+
 ## Docker Workflow
 
 Running/testing opsimulate source:
