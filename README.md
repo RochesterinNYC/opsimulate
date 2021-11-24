@@ -47,6 +47,8 @@ Also, make sure you give the service account the Project Owner role.
 
 ## Usage/Workflow
 
+Optional: Set the UBUNTU_VERSION environment variable to select the [operating system version](https://cloud.google.com/compute/docs/images/os-details). Defaults to 'ubuntu-1804-lts'. 
+
 - Run `opsimulate setup` to setup the home `~/.opsimulate` directory that opsimulate generates artifacts in.
 - Run `opsimulate load_credentials <path to GCP-service-account-credentials.json>` to load in the GCP service account credentials.
 - Run `opsimulate deploy` to create the Gitlab instance and make it accessible.
