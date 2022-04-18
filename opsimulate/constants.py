@@ -37,7 +37,7 @@ SERVICE_ACCOUNT_FILE = os.path.join(OPSIMULATE_HOME, 'service-account.json')
 
 ZONE = 'us-east4-a'
 MACHINE_TYPE = 'n1-standard-1'
-UBUNTU_VERSION = 'ubuntu-1404-lts'
+UBUNTU_VERSION = os.environ.get('UBUNTU_VERSION', 'ubuntu-1804-lts')
 INSTANCE_NAME = 'opsimulate-gitlab'
 VM_USERNAME = 'opsimulate'
 GITLAB_TAG = 'gitlab'
